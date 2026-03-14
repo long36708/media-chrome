@@ -407,6 +407,116 @@ export class VideoPlayerComponent implements AfterViewInit {
 </media-controller>
 ```
 
+## 自定义媒体元素开发
+
+Media Chrome 将与任何暴露与 HTML 媒体元素（`<video>` 和 `<audio>`）相同 API 的元素一起工作。这意味着你可以用自己的自定义元素替换这些元素，只要它们符合相同的 API。
+
+了解 [HTMLMediaElement API on MDN](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement)。
+
+### Media Slot 工作原理
+
+Media Controller 会自动：
+- 监听 slot="media" 中元素发出的事件
+- 使用已知的属性理解媒体元素的当前状态
+- 调用媒体元素上的方法，如 `play()`、`pause()` 等
+
+### 三种实现方式
+
+| 方式 | 适用场景 | 复杂度 |
+|------|---------|--------|
+| **最小媒体元素** | 快速原型、测试、只需要部分功能 | ⭐ 简单 |
+| **扩展原生元素** | 在原生基础上添加功能 | ⭐⭐ 中等 |
+| **完全自定义实现** | 支持新的流媒体协议 | ⭐⭐⭐ 复杂 |
+
+---
+
+### 方式一：最小媒体元素
+
+**关键要点**：不需要支持完整的 `HTMLMediaElement` API，只需实现组件所需的部分
+
+例如，要使播放按钮工作，只需要：
+- 提供 `play()` 和 `pause()` 方法
+- 触发 `play`、`playing` 和 `pause` 事件
+- 提供 `paused` getter
+
+---
+
+### 方式二：扩展原生元素
+
+使用 [custom-media-element](https://github.com/muxinc/custom-media-element) 库，在原生 `<video>` 或 `<audio>` 元素上添加功能。
+
+**优点**：
+- ✅ 自动继承完整的 `HTMLVideoElement` API
+- ✅ 保持与原生元素相同的事件行为
+- ✅ 简化实现，只需关注扩展功能
+- ✅ 支持所有 Media Chrome 控制组件
+
+---
+
+### 方式三：完全自定义实现
+
+当需要完全自定义媒体引擎（如支持新的流媒体协议）时，必须满足完整的 HTMLMediaElement 接口要求。
+
+### 完整要求快速参考
+
+| 类别 | 必需项 |
+|------|--------|
+| **方法** | `play()`、`addEventListener()`、`removeEventListener()` |
+| **属性** | `paused`、`duration`、`currentTime`、`volume`、`muted`、`playbackRate`、`readyState`、`error` |
+| **事件** | `play`、`pause`、`playing`、`timeupdate`、`durationchange`、`ended`、`error` 等 |
+| **轨道** | `textTracks`、`addtrack`、`removetrack`、`change` 事件 |
+
+---
+
+### 详细实现指南
+
+**📖 所有实现方式的完整代码示例、详细说明和测试清单，请参考：**
+`references/media-element-implementation.md`
+
+该指南包含：
+- 三种实现方式的完整代码示例（可运行）
+- 完整的接口规范和类型定义
+- 所有必需事件的详细说明和触发时机
+- Text Tracks、Video Renditions、Audio Tracks 的实现示例
+- 画中画、全屏、远程播放等高级功能的实现
+- 实现要点和常见陷阱
+- 测试 checklist
+
+### 参考实现
+
+#### 官方媒体元素
+
+- **[hls-video-element](https://github.com/muxinc/hls-video-element)** - HLS 流媒体（使用 custom-media-element）
+- **[youtube-video-element](https://github.com/muxinc/youtube-video-element)** - YouTube 视频（使用 custom-media-element）
+- **[dash-video-element](https://github.com/muxinc/dash-video-element)** - DASH 流媒体（使用 custom-media-element）
+- **[vimeo-video-element](https://github.com/muxinc/vimeo-video-element)** - Vimeo 视频（使用 custom-media-element）
+
+#### 社区媒体元素
+
+- **[jwplayer-video-element](https://github.com/muxinc/jwplayer-video-element)** - JW Player 集成
+- **[videojs-video-element](https://github.com/muxinc/videojs-video-element)** - Video.js 集成
+- **[mux-video-element](https://github.com/muxinc/mux-video-element)** - Mux Video 播放
+- **[plyr-video-element](https://github.com/muxinc/plyr-video-element)** - Plyr 集成
+
+#### 工具库
+
+- **[custom-media-element](https://github.com/muxinc/custom-media-element)** - 扩展原生媒体元素的基础库
+
+#### 项目源码
+
+- `src/js/media-controller.ts` - MediaController 的媒体元素查找逻辑
+- `src/js/media-store/state-mediator.ts` - 状态中介者，监听所有媒体事件
+
+### 如何选择实现方式
+
+| 需求 | 推荐方式 |
+|------|---------|
+| 快速原型/测试 | 最小媒体元素 |
+| 在原生基础上扩展 | custom-media-element |
+| 支持 HLS/DASH | 使用对应的官方元素 |
+| 支持第三方播放器 | 使用对应的社区元素 |
+| 全新流媒体协议 | 完全自定义实现
+
 ## 自定义组件开发
 
 当需要创建自定义媒体控制组件时，参考项目源码中的现有组件实现：
@@ -475,69 +585,46 @@ if (!globalThis.customElements.get('my-custom-button')) {
 
 ## 项目构建与开发
 
-### 开发此项目的脚本
+**📝 注意**：本节内容仅适用于为 Media Chrome 项目贡献代码的开发者。如果只是使用 Media Chrome 库，可以跳过此部分。
+
+**📖 完整的开发指南、构建脚本和测试指南，请参考：**
+`references/project-development.md`
+
+### 快速开始
 
 ```bash
 # 安装依赖
 npm install
-
-# 清理构建
-npm run clean
-
-# 格式化代码
-npm run format
-
-# Lint 检查
-npm run lint
-
-# 类型检查
-npm run build:types
-
-# 构建 ESM
-npm run build:esm
-
-# 构建 CJS
-npm run build:cjs
-
-# 构建 IIFE
-npm run build:iife:*
-
-# 构建 React 包装器
-npm run build:react
-
-# 完整构建
-npm run build
 
 # 监听模式开发
 npm run dev
 
 # 运行测试
 npm test
+
+# 完整构建
+npm run build
 ```
 
-### 项目结构
+### 开发指南包含：
 
-- `src/js/` - 源代码目录
-  - `media-*.ts` - 各个组件的实现
-  - `constants.ts` - 常量定义
-  - `utils/` - 工具函数
-  - `media-store/` - 状态管理
-- `examples/` - 示例代码
-  - `vanilla/` - 原生 JS 示例
-  - `nextjs-with-typescript/` - Next.js 示例
-  - `vite-react-with-typescript/` - Vite + React 示例
-- `test/` - 测试文件
-- `docs/` - 文档文件
+- 详细的构建脚本说明
+- 项目结构和目录说明
+- 添加新组件的完整流程
+- 组件开发最佳实践
+- 测试指南和示例
+- 调试技巧和常见问题
+- 贡献指南
 
-### 添加新组件流程
+### 常用命令
 
-1. 在 `src/js/` 创建组件文件（如 `media-my-button.ts`）
-2. 继承适当的基类（`MediaChromeButton`、`MediaChromeRange` 等）
-3. 实现必要的生命周期方法和事件处理
-4. 在 `src/js/index.ts` 中导出组件
-5. 添加测试文件到 `test/`
-6. 创建示例文件到 `examples/`
-7. 运行测试确保功能正常
+| 命令 | 说明 |
+|------|------|
+| `npm run dev` | 开发模式（带热重载） |
+| `npm test` | 运行测试 |
+| `npm run build` | 完整构建 |
+| `npm run lint` | Lint 检查 |
+| `npm run format` | 格式化代码 |
 
 ## 参考资源
 
@@ -547,6 +634,13 @@ npm test
 - [组件文档](https://media-chrome.org/docs/en/components)
 
 ### 项目内参考文件
+
+**详细指南：**
+- `references/media-element-implementation.md` - 自定义媒体元素实现指南（完整代码示例）
+- `references/project-development.md` - 项目开发指南（构建、贡献）
+- `references/testing-guide.md` - 测试指南（测试框架、示例、最佳实践）
+
+**示例和源码：**
 - `references/css-variables.md` - CSS 变量完整列表
 - `examples/vanilla/basic.html` - 基础示例
 - `examples/vanilla/advanced.html` - 高级示例
