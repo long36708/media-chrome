@@ -1,27 +1,27 @@
 ---
 name: web-component-best-practices
-description: This skill should be used when creating, implementing, or refactoring Web Components. Provides comprehensive best practices for Web Component development including architecture design, TypeScript integration, attribute management, lifecycle handling, Shadow DOM usage, event handling, and performance optimization. Focuses on generic, reusable patterns that apply to any Web Component implementation.
+description: 此技能应在创建、实现或重构 Web Components 时使用。提供 Web Component 开发的全面最佳实践，包括架构设计、TypeScript 集成、属性管理、生命周期处理、Shadow DOM 使用、事件处理和性能优化。专注于适用于任何 Web Component 实现的通用、可重用模式。
 ---
 
-# Web Component Best Practices
+# Web Component 最佳实践
 
-This skill provides comprehensive best practices for building modern, production-ready Web Components. These practices are based on proven patterns from real-world implementations and focus on maintainability, type safety, performance, and developer experience.
+此技能提供了构建现代化、生产级 Web Components 的全面最佳实践。这些实践基于真实世界实现的经过验证的模式，专注于可维护性、类型安全、性能和开发体验。
 
-## When to Use This Skill
+## 何时使用此技能
 
-Use this skill when:
-- Creating new Web Components from scratch
-- Refactoring existing Web Components
-- Designing Web Component architecture
-- Implementing complex component interactions
-- Optimizing Web Component performance
-- Establishing Web Component development standards
+在以下情况下使用此技能：
+- 从零开始创建新的 Web Components
+- 重构现有的 Web Components
+- 设计 Web Component 架构
+- 实现复杂的组件交互
+- 优化 Web Component 性能
+- 建立 Web Component 开发标准
 
-## Architecture Design
+## 架构设计
 
-### Base Class Pattern
+### 基类模式
 
-Always use a base class to provide common functionality across all components:
+始终使用基类为所有组件提供通用功能：
 
 ```typescript
 // base-element.ts
@@ -42,29 +42,29 @@ export class BaseElement extends HTMLElement {
 }
 ```
 
-**Benefits:**
-- Provides consistent inheritance pattern
-- Centralizes common lifecycle hooks
-- Enables shared utility methods
-- Ensures uniform API across components
+**优势：**
+- 提供一致的继承模式
+- 集中化通用生命周期钩子
+- 启用共享工具方法
+- 确保组件间统一的 API
 
-### Component Hierarchy
+### 组件层次结构
 
-Organize components in logical hierarchies:
+按逻辑层次组织组件：
 
 ```
-BaseElement (abstract base)
-  ├── InteractiveElement (click, keyboard, focus)
+BaseElement (抽象基类)
+  ├── InteractiveElement (点击、键盘、焦点)
   │     ├── ButtonElement
   │     └── InputElement
-  └── ContainerElement (layout, sizing)
+  └── ContainerElement (布局、尺寸)
         ├── CardElement
         └── PanelElement
 ```
 
-### Dependency Injection
+### 依赖注入
 
-Use dependency injection for shared services:
+使用依赖注入来共享服务：
 
 ```typescript
 class MyComponent extends BaseElement {
@@ -82,11 +82,11 @@ class MyComponent extends BaseElement {
 }
 ```
 
-## TypeScript Integration
+## TypeScript 集成
 
-### Type-Safe Constants
+### 类型安全的常量
 
-Define constants with TypeScript types:
+使用 TypeScript 类型定义常量：
 
 ```typescript
 // constants.ts
@@ -108,9 +108,9 @@ export type ComponentAttributes = typeof ComponentAttributes;
 export type ComponentProps = typeof ComponentProps;
 ```
 
-### Type-Safe Event System
+### 类型安全的事件系统
 
-Define events with strong types:
+定义强类型事件：
 
 ```typescript
 export const ComponentEvents = {
@@ -125,9 +125,9 @@ export type ComponentEventType = {
 };
 ```
 
-### Attribute Type Mapping
+### 属性类型映射
 
-Create type-safe attribute getters/setters:
+创建类型安全的属性 getter/setter：
 
 ```typescript
 // attribute-utils.ts
@@ -196,11 +196,11 @@ export function setStringAttr(
 }
 ```
 
-## Attribute Management
+## 属性管理
 
-### Observed Attributes
+### 观察属性
 
-Declare observed attributes statically:
+静态声明要观察的属性：
 
 ```typescript
 export class MyComponent extends BaseElement {
@@ -233,26 +233,26 @@ export class MyComponent extends BaseElement {
   }
 
   private handleValueChange(oldValue: string | null, newValue: string | null): void {
-    // Update internal state and DOM
+    // 更新内部状态和 DOM
   }
 
   private handleLabelChange(oldValue: string | null, newValue: string | null): void {
-    // Update label display
+    // 更新标签显示
   }
 
   private handleDisabledChange(oldValue: string | null, newValue: string | null): void {
-    // Update disabled state
+    // 更新禁用状态
   }
 }
 ```
 
-### Property-Attribute Synchronization
+### 属性-属性同步
 
-Use getters/setters to sync properties with attributes:
+使用 getter/setter 将属性与属性同步：
 
 ```typescript
 export class MyComponent extends BaseElement {
-  // Boolean property
+  // 布尔属性
   get disabled(): boolean {
     return getBooleanAttr(this, ComponentAttributes.DISABLED);
   }
@@ -261,7 +261,7 @@ export class MyComponent extends BaseElement {
     setBooleanAttr(this, ComponentAttributes.DISABLED, value);
   }
 
-  // String property
+  // 字符串属性
   get label(): string {
     return getStringAttr(this, ComponentAttributes.LABEL, '');
   }
@@ -270,7 +270,7 @@ export class MyComponent extends BaseElement {
     setStringAttr(this, ComponentAttributes.LABEL, value);
   }
 
-  // Number property
+  // 数字属性
   get value(): number {
     return getNumericAttr(this, ComponentAttributes.VALUE, 0) ?? 0;
   }
@@ -281,9 +281,9 @@ export class MyComponent extends BaseElement {
 }
 ```
 
-### Custom Attribute Serializers
+### 自定义属性序列化器
 
-Create serializers for complex types:
+为复杂类型创建序列化器：
 
 ```typescript
 // serializers.ts
@@ -312,11 +312,11 @@ export function deserializeAttr(attrName: string, value: string): any {
 }
 ```
 
-## Lifecycle Management
+## 生命周期管理
 
-### Connection Hook
+### 连接钩子
 
-Use `connectedCallback` for initialization:
+使用 `connectedCallback` 进行初始化：
 
 ```typescript
 export class MyComponent extends BaseElement {
@@ -355,23 +355,23 @@ export class MyComponent extends BaseElement {
   }
 
   disconnectedCallback(): void {
-    // Clean up all resources
+    // 清理所有资源
     this.#cleanupFns.forEach(cleanup => cleanup());
     this.#cleanupFns = [];
   }
 }
 ```
 
-### Private Field Pattern
+### 私有字段模式
 
-Use private fields with arrow functions:
+使用箭头函数的私有字段：
 
 ```typescript
 export class MyComponent extends BaseElement {
   #value = 0;
   #listeners: Map<string, EventListener> = new Map();
 
-  // Private event handler with bound `this`
+  // 带有绑定 `this` 的私有事件处理程序
   #handleClick = (event: MouseEvent): void => {
     this.value = this.value + 1;
     this.dispatchEvent(new CustomEvent('change', {
@@ -381,17 +381,17 @@ export class MyComponent extends BaseElement {
     }));
   };
 
-  private handleClick = (event: MouseEvent): void => { // Private method
-    // Implementation
+  private handleClick = (event: MouseEvent): void => { // 私有方法
+    // 实现
   };
 }
 ```
 
-## Shadow DOM Usage
+## Shadow DOM 使用
 
-### Shadow DOM Encapsulation
+### Shadow DOM 封装
 
-Always use Shadow DOM for style encapsulation:
+始终使用 Shadow DOM 进行样式封装：
 
 ```typescript
 export class MyComponent extends BaseElement {
@@ -426,9 +426,9 @@ export class MyComponent extends BaseElement {
 }
 ```
 
-### CSS Custom Properties
+### CSS 自定义属性
 
-Define and use CSS custom properties for theming:
+定义并使用 CSS 自定义属性进行主题化：
 
 ```typescript
 export class MyComponent extends BaseElement {
@@ -436,7 +436,7 @@ export class MyComponent extends BaseElement {
     this.shadowRoot.innerHTML = `
       <style>
         :host {
-          /* Default theme values */
+          /* 默认主题值 */
           --primary-color: #007bff;
           --secondary-color: #6c757d;
           --text-color: #333;
@@ -459,16 +459,16 @@ export class MyComponent extends BaseElement {
         }
       </style>
       <button class="button">
-        <slot>Default Label</slot>
+        <slot>默认标签</slot>
       </button>
     `;
   }
 }
 ```
 
-### Dynamic Style Updates
+### 动态样式更新
 
-Use CSS rules for dynamic updates:
+使用 CSS 规则进行动态更新：
 
 ```typescript
 // utils/css.ts
@@ -489,13 +489,13 @@ export function getOrInsertCSSRule(
     }
   }
 
-  // Insert new rule
+  // 插入新规则
   const stylesheet = stylesheets[0];
   const index = stylesheet.insertRule(`${selectorText} {}`, stylesheet.cssRules.length);
   return stylesheet.cssRules[index] as CSSStyleRule;
 }
 
-// Usage in component
+// 在组件中使用
 export class MyComponent extends BaseElement {
   #hostRule: CSSStyleRule | null = null;
 
@@ -513,16 +513,16 @@ export class MyComponent extends BaseElement {
 }
 ```
 
-## Event Handling
+## 事件处理
 
-### Arrow Function Pattern
+### 箭头函数模式
 
-Use arrow functions for event handlers to maintain `this` binding:
+使用箭头函数作为事件处理程序以保持 `this` 绑定：
 
 ```typescript
 export class MyComponent extends BaseElement {
   #clickHandler = (event: MouseEvent): void => {
-    // `this` is correctly bound
+    // `this` 绑定正确
     this.handleClick(event);
   };
 
@@ -537,14 +537,14 @@ export class MyComponent extends BaseElement {
   }
 
   private handleClick(event: MouseEvent): void {
-    // Implementation
+    // 实现
   }
 }
 ```
 
-### Event Composition
+### 事件组合
 
-Use `composed: true` for events to cross Shadow DOM boundaries:
+使用 `composed: true` 让事件穿越 Shadow DOM 边界：
 
 ```typescript
 export class MyComponent extends BaseElement {
@@ -552,16 +552,16 @@ export class MyComponent extends BaseElement {
     const event = new CustomEvent('valuechange', {
       detail: { value: newValue },
       bubbles: true,
-      composed: true, // Allows event to escape Shadow DOM
+      composed: true, // 允许事件逃逸 Shadow DOM
     });
     this.dispatchEvent(event);
   }
 }
 ```
 
-### Event Delegation
+### 事件委托
 
-Use event delegation for dynamic content:
+使用事件委托处理动态内容：
 
 ```typescript
 export class MyComponent extends BaseElement {
@@ -581,16 +581,16 @@ export class MyComponent extends BaseElement {
   };
 
   private handleAction(action: string | undefined): void {
-    // Handle action
+    // 处理操作
   }
 }
 ```
 
-## Performance Optimization
+## 性能优化
 
-### DOM Updates
+### DOM 更新
 
-Minimize DOM operations:
+最小化 DOM 操作：
 
 ```typescript
 export class MyComponent extends BaseElement {
@@ -607,14 +607,14 @@ export class MyComponent extends BaseElement {
   }
 
   private render(): void {
-    // Batch DOM updates here
+    // 在此处批量更新 DOM
   }
 }
 ```
 
-### Attribute Change Optimization
+### 属性变化优化
 
-Avoid redundant updates:
+避免冗余更新：
 
 ```typescript
 export class MyComponent extends BaseElement {
@@ -624,15 +624,15 @@ export class MyComponent extends BaseElement {
 
   set value(newValue: number) {
     const current = this.value;
-    if (current === newValue) return; // Skip if unchanged
+    if (current === newValue) return; // 如果未更改则跳过
     setNumericAttr(this, 'value', newValue);
   }
 }
 ```
 
-### Virtual Scrolling (Advanced)
+### 虚拟滚动（高级）
 
-For lists with many items, implement virtual scrolling:
+对于包含许多项目的列表，实现虚拟滚动：
 
 ```typescript
 export class VirtualList extends BaseElement {
@@ -651,16 +651,16 @@ export class VirtualList extends BaseElement {
   }
 
   private renderVisibleItems(): void {
-    // Render only visible items
+    // 仅渲染可见项目
   }
 }
 ```
 
-## Accessibility
+## 可访问性
 
-### ARIA Attributes
+### ARIA 属性
 
-Always include appropriate ARIA attributes:
+始终包含适当的 ARIA 属性：
 
 ```typescript
 export class ButtonComponent extends BaseElement {
@@ -683,9 +683,9 @@ export class ButtonComponent extends BaseElement {
 }
 ```
 
-### Keyboard Navigation
+### 键盘导航
 
-Implement keyboard navigation for interactive components:
+为交互式组件实现键盘导航：
 
 ```typescript
 export class InteractiveComponent extends BaseElement {
@@ -714,18 +714,18 @@ export class InteractiveComponent extends BaseElement {
   }
 
   private activate(): void {
-    // Activate component
+    // 激活组件
   }
 
   private navigate(direction: number): void {
-    // Navigate to next/previous item
+    // 导航到下一个/上一个项目
   }
 }
 ```
 
-### Focus Management
+### 焦点管理
 
-Manage focus properly:
+正确管理焦点：
 
 ```typescript
 export class ModalComponent extends BaseElement {
@@ -743,11 +743,11 @@ export class ModalComponent extends BaseElement {
 }
 ```
 
-## Testing
+## 测试
 
-### Unit Testing Pattern
+### 单元测试模式
 
-Test components in isolation:
+隔离测试组件：
 
 ```typescript
 // my-component.test.ts
@@ -755,7 +755,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { MyComponent } from './my-component';
 
 describe('MyComponent', () => {
-  it('should render with default values', () => {
+  it('应该使用默认值渲染', () => {
     const element = document.createElement('my-component') as MyComponent;
     document.body.appendChild(element);
 
@@ -763,7 +763,7 @@ describe('MyComponent', () => {
     expect(element.disabled).toBe(false);
   });
 
-  it('should update value attribute', () => {
+  it('应该更新 value 属性', () => {
     const element = document.createElement('my-component') as MyComponent;
     document.body.appendChild(element);
 
@@ -771,7 +771,7 @@ describe('MyComponent', () => {
     expect(element.getAttribute('value')).toBe('42');
   });
 
-  it('should dispatch valuechange event', () => {
+  it('应该分发 valuechange 事件', () => {
     const element = document.createElement('my-component') as MyComponent;
     document.body.appendChild(element);
 
@@ -788,11 +788,11 @@ describe('MyComponent', () => {
 });
 ```
 
-## Component Registration
+## 组件注册
 
-### Safe Registration Pattern
+### 安全注册模式
 
-Register components only once:
+仅注册一次组件：
 
 ```typescript
 export function registerCustomElement(
@@ -804,13 +804,13 @@ export function registerCustomElement(
   }
 }
 
-// Usage
+// 使用
 registerCustomElement('my-component', MyComponent);
 ```
 
-### Lazy Registration
+### 延迟注册
 
-Register components on-demand:
+按需注册组件：
 
 ```typescript
 export function lazyRegister(
@@ -841,15 +841,15 @@ export function lazyRegister(
   });
 }
 
-// Usage
+// 使用
 lazyRegister('my-component', () => import('./my-component'));
 ```
 
-## Error Handling
+## 错误处理
 
-### Graceful Degradation
+### 优雅降级
 
-Handle errors gracefully:
+优雅地处理错误：
 
 ```typescript
 export class MyComponent extends BaseElement {
@@ -880,9 +880,9 @@ export class MyComponent extends BaseElement {
 }
 ```
 
-### Validation
+### 验证
 
-Validate inputs and attributes:
+验证输入和属性：
 
 ```typescript
 export class InputComponent extends BaseElement {
@@ -898,11 +898,11 @@ export class InputComponent extends BaseElement {
 }
 ```
 
-## Documentation
+## 文档
 
-### Web Component Manifest
+### Web Component 清单
 
-Include a manifest for documentation tools:
+为文档工具包含清单：
 
 ```typescript
 // my-component.manifest.ts
@@ -945,18 +945,18 @@ export default {
 };
 ```
 
-## Migration Guide
+## 迁移指南
 
-### Upgrading Components
+### 升级组件
 
-When upgrading components, maintain backward compatibility:
+升级组件时，保持向后兼容：
 
 ```typescript
 export class MyComponent extends BaseElement {
   static get observedAttributes(): string[] {
     return [
-      'value', // New attribute
-      'old-value', // Deprecated attribute
+      'value', // 新属性
+      'old-value', // 已弃用属性
     ];
   }
 
@@ -968,7 +968,7 @@ export class MyComponent extends BaseElement {
     super.attributeChangedCallback(attrName, oldValue, newValue);
 
     if (attrName === 'old-value') {
-      // Migrate to new attribute
+      // 迁移到新属性
       console.warn(
         'old-value is deprecated. Use value instead.',
         this
@@ -979,22 +979,22 @@ export class MyComponent extends BaseElement {
 }
 ```
 
-## Summary Checklist
+## 总结清单
 
-When creating Web Components, ensure:
+创建 Web Components 时，确保：
 
-- ✅ Use a base class for common functionality
-- ✅ Implement TypeScript with type-safe constants
-- ✅ Use utility functions for attribute operations
-- ✅ Properly manage lifecycle hooks
-- ✅ Encapsulate styles with Shadow DOM
-- ✅ Use CSS custom properties for theming
-- ✅ Handle events with arrow functions
-- ✅ Optimize DOM operations
-- ✅ Include ARIA attributes for accessibility
-- ✅ Implement keyboard navigation
-- ✅ Write comprehensive tests
-- ✅ Register components safely
-- ✅ Handle errors gracefully
-- ✅ Document component API
-- ✅ Maintain backward compatibility
+- ✅ 使用基类提供通用功能
+- ✅ 使用类型安全常量实现 TypeScript
+- ✅ 使用工具函数进行属性操作
+- ✅ 正确管理生命周期钩子
+- ✅ 使用 Shadow DOM 封装样式
+- ✅ 使用 CSS 自定义属性进行主题化
+- ✅ 使用箭头函数处理事件
+- ✅ 优化 DOM 操作
+- ✅ 包含可访问性的 ARIA 属性
+- ✅ 实现键盘导航
+- ✅ 编写全面的测试
+- ✅ 安全注册组件
+- ✅ 优雅地处理错误
+- ✅ 记录组件 API
+- ✅ 保持向后兼容

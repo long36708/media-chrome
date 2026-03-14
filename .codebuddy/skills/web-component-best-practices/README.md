@@ -1,125 +1,125 @@
-# Web Component Best Practices
+# Web Component 最佳实践
 
-This skill provides comprehensive best practices for building modern, production-ready Web Components.
+这个技能提供了构建现代化、生产级 Web Component 的全面最佳实践。
 
-## Contents
+## 内容
 
 ### SKILL.md
-The main skill documentation containing:
-- Architecture design patterns
-- TypeScript integration guidelines
-- Attribute management strategies
-- Lifecycle management best practices
-- Shadow DOM usage patterns
-- Event handling techniques
-- Performance optimization tips
-- Accessibility guidelines
-- Testing strategies
-- Component registration patterns
+主要技能文档，包含：
+- 架构设计模式
+- TypeScript 集成指南
+- 属性管理策略
+- 生命周期管理最佳实践
+- Shadow DOM 使用模式
+- 事件处理技术
+- 性能优化技巧
+- 可访问性指南
+- 测试策略
+- 组件注册模式
 
 ### References
 
 #### `references/complete-example.ts`
-A complete, production-ready counter component demonstrating all best practices:
-- Base class inheritance
-- Attribute-property synchronization
-- Event handling with delegation
-- Lifecycle management
-- Accessibility features
-- Keyboard navigation
-- Shadow DOM encapsulation
-- CSS custom properties for theming
+一个完整的、生产级的计数器组件，展示了所有最佳实践：
+- 基类继承
+- 属性-属性同步
+- 事件委托处理
+- 生命周期管理
+- 可访问性功能
+- 键盘导航
+- Shadow DOM 封装
+- CSS 自定义属性用于主题化
 
 #### `references/attribute-utils.ts`
-Utility functions for type-safe attribute operations:
-- Boolean, numeric, string, JSON attribute getters/setters
-- Custom attribute serializers/deserializers
-- Token list and date attribute helpers
-- Attribute change watching utilities
-- Batch attribute operations
+类型安全的属性操作工具函数：
+- 布尔、数字、字符串、JSON 属性的 getter/setter
+- 自定义属性序列化器/反序列化器
+- 令牌列表和日期属性辅助函数
+- 属性变化监听工具
+- 批量属性操作
 
 #### `references/css-utils.ts`
-CSS utilities for Shadow DOM:
-- CSS rule management (get, insert, remove)
-- CSS custom property management
-- Scoped stylesheets
-- Animation helpers
-- Media query listeners
-- Focus trap implementation
-- Resize/Intersection/Mutation observers
+Shadow DOM 的 CSS 工具：
+- CSS 规则管理（获取、插入、删除）
+- CSS 自定义属性管理
+- 作用域样式表
+- 动画辅助函数
+- 媒体查询监听器
+- 焦点陷阱实现
+- Resize/Intersection/Mutation 观察器
 
 #### `references/testing-guide.ts`
-Comprehensive testing patterns with Vitest:
-- Basic rendering tests
-- Attribute-property synchronization tests
-- Value update tests
-- Event handling tests
-- Event dispatching tests
-- Boundary condition tests
-- Accessibility tests
-- Lifecycle tests
-- Edge case handling
-- Integration tests
+使用 Vitest 的综合测试模式：
+- 基础渲染测试
+- 属性-属性同步测试
+- 值更新测试
+- 事件处理测试
+- 事件分发测试
+- 边界条件测试
+- 可访问性测试
+- 生命周期测试
+- 边缘情况处理
+- 集成测试
 
 ### Assets
 
 #### `assets/examples.html`
-Live HTML examples demonstrating:
-- Basic usage
-- Attribute configuration
+实时的 HTML 示例，展示：
+- 基本用法
+- 属性配置
 - JavaScript API
-- Event handling
-- Styling with CSS custom properties
-- Slot usage
-- Disabled state
-- Multiple instances
-- Keyboard navigation
+- 事件处理
+- 使用 CSS 自定义属性进行样式设置
+- 插槽使用
+- 禁用状态
+- 多实例
+- 键盘导航
 
-## Key Features
+## 核心特性
 
-### 1. Type Safety
-- Strongly typed constants and events
-- Type-safe attribute utilities
-- Comprehensive TypeScript support
+### 1. 类型安全
+- 强类型常量和事件
+- 类型安全的属性工具
+- 全面的 TypeScript 支持
 
-### 2. Performance
-- Efficient DOM updates with requestAnimationFrame
-- CSS rule caching
-- Minimal attribute changes
-- Event delegation for dynamic content
+### 2. 性能
+- 使用 requestAnimationFrame 高效更新 DOM
+- CSS 规则缓存
+- 最小化属性变更
+- 动态内容的事件委托
 
-### 3. Accessibility
-- ARIA attributes
-- Keyboard navigation
-- Focus management
-- Screen reader support
+### 3. 可访问性
+- ARIA 属性
+- 键盘导航
+- 焦点管理
+- 屏幕阅读器支持
 
-### 4. Developer Experience
-- Clear naming conventions
-- Comprehensive documentation
-- Reusable utility functions
-- Testing patterns
+### 4. 开发体验
+- 清晰的命名约定
+- 全面的文档
+- 可重用的工具函数
+- 测试模式
 
-### 5. Best Practices
-- Base class pattern
-- Shadow DOM encapsulation
-- CSS custom properties for theming
-- Event composition
-- Lifecycle management
+### 5. 最佳实践
+- 基类模式
+- Shadow DOM 封装
+- CSS 自定义属性用于主题化
+- 事件组合
+- 生命周期管理
 
-## Usage
+## 使用方法
 
-When creating or refactoring Web Components, this skill provides:
+当创建或重构 Web Component 时，此技能提供：
 
-1. **Architectural guidance** - How to structure components
-2. **TypeScript patterns** - Type-safe implementations
-3. **Attribute management** - Best practices for attributes/properties
-4. **Event handling** - Reliable event patterns
-5. **Styling** - Shadow DOM and CSS custom properties
-6. **Testing** - Comprehensive testing strategies
-7. **Accessibility** - A11y best practices
+1. **架构指导** - 如何构建组件
+2. **TypeScript 模式** - 类型安全的实现
+3. **属性管理** - 属性/属性的最佳实践
+4. **事件处理** - 可靠的事件模式
+5. **样式设置** - Shadow DOM 和 CSS 自定义属性
+6. **测试** - 全面的测试策略
+7. **可访问性** - A11y 最佳实践
 
-## Example
+## 示例
 
 ```typescript
 import {
@@ -134,7 +134,7 @@ export class MyComponent extends HTMLElement {
     return ['value', 'disabled'];
   }
 
-  // Properties with type-safe getters/setters
+  // 带有类型安全 getter/setter 的属性
   get value(): number {
     return getNumericAttr(this, 'value', 0) ?? 0;
   }
@@ -174,20 +174,20 @@ export class MyComponent extends HTMLElement {
 }
 ```
 
-## Testing
+## 测试
 
-See `references/testing-guide.ts` for comprehensive testing examples covering:
-- Rendering
-- Attribute synchronization
-- Event handling
-- Accessibility
-- Edge cases
-- Integration scenarios
+请参阅 `references/testing-guide.ts` 获取全面的测试示例，涵盖：
+- 渲染
+- 属性同步
+- 事件处理
+- 可访问性
+- 边缘情况
+- 集成场景
 
-## Contributing
+## 贡献
 
-This skill is based on real-world best practices from production Web Component implementations. It provides generic, reusable patterns applicable to any Web Component project.
+这个技能基于生产环境 Web Component 实现的真实最佳实践。它提供了通用的、可重用的模式，适用于任何 Web Component 项目。
 
-## License
+## 许可证
 
-This skill is part of the .codebuddy/skills collection.
+此技能是 .codebuddy/skills 集合的一部分。
