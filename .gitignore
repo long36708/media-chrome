@@ -9,6 +9,7 @@ sandbox/*
 
 .vercel
 .vscode
+.idea
 
 ## testing
 /coverage/
