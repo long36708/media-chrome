@@ -113,7 +113,10 @@ class MediaController extends MediaContainer {
       Attributes.NO_MUTED_PREF,
       Attributes.NO_VOLUME_PREF,
       Attributes.LANG,
-      Attributes.LOOP
+      Attributes.LOOP,
+      Attributes.LIVE_EDGE_OFFSET,
+      Attributes.SEEK_TO_LIVE_OFFSET,
+      Attributes.NO_AUTO_SEEK_TO_LIVE
     );
   }
 
@@ -155,10 +158,6 @@ class MediaController extends MediaContainer {
       });
       prevState = nextState;
     };
-
-    this.hasAttribute(Attributes.NO_HOTKEYS)
-      ? this.disableHotkeys()
-      : this.enableHotkeys();
   }
 
   #setupDefaultStore() {
@@ -356,24 +355,33 @@ class MediaController extends MediaContainer {
             this.getAttribute(Attributes.DEFAULT_STREAM_TYPE) ?? undefined,
         },
       });
-    } else if (attrName === Attributes.LIVE_EDGE_OFFSET) {
+    } else if (attrName === Attributes.LIVE_EDGE_OFFSET && newValue !== oldValue) {
       this.#mediaStore?.dispatch({
         type: 'optionschangerequest',
         detail: {
           liveEdgeOffset: this.hasAttribute(Attributes.LIVE_EDGE_OFFSET)
             ? +this.getAttribute(Attributes.LIVE_EDGE_OFFSET)
             : undefined,
-          seekToLiveOffset: !this.hasAttribute(Attributes.SEEK_TO_LIVE_OFFSET)
+          seekToLiveOffset: this.hasAttribute(Attributes.SEEK_TO_LIVE_OFFSET)
+            ? +this.getAttribute(Attributes.SEEK_TO_LIVE_OFFSET)
+            : this.hasAttribute(Attributes.LIVE_EDGE_OFFSET)
             ? +this.getAttribute(Attributes.LIVE_EDGE_OFFSET)
             : undefined,
-        },
+          },
       });
-    } else if (attrName === Attributes.SEEK_TO_LIVE_OFFSET) {
+    } else if (
+      attrName === Attributes.SEEK_TO_LIVE_OFFSET &&
+      newValue !== oldValue
+    ) {
       this.#mediaStore?.dispatch({
         type: 'optionschangerequest',
         detail: {
+          // Mirror #setupDefaultStore: prefer seektoliveoffset, fall back to
+          // liveedgeoffset, otherwise undefined.
           seekToLiveOffset: this.hasAttribute(Attributes.SEEK_TO_LIVE_OFFSET)
             ? +this.getAttribute(Attributes.SEEK_TO_LIVE_OFFSET)
+            : this.hasAttribute(Attributes.LIVE_EDGE_OFFSET)
+            ? +this.getAttribute(Attributes.LIVE_EDGE_OFFSET)
             : undefined,
         },
       });
@@ -428,6 +436,8 @@ class MediaController extends MediaContainer {
   }
 
   connectedCallback(): void {
+    this.associateElement(this);
+
     // NOTE: Need to defer default MediaStore creation until connected for use cases that
     // rely on createElement('media-controller') (like many frameworks "under the hood") (CJP).
     if (!this.#mediaStore && !this.hasAttribute(Attributes.NO_DEFAULT_STORE)) {
@@ -437,6 +447,10 @@ class MediaController extends MediaContainer {
     this.#mediaStore?.dispatch({
       type: 'documentelementchangerequest',
       detail: document,
+    });
+    this.#mediaStore?.dispatch({
+      type: 'fullscreenelementchangerequest',
+      detail: this.fullscreenElement,
     });
 
     // mediaSetCallback() is called in super.connectedCallback();
@@ -476,6 +490,13 @@ class MediaController extends MediaContainer {
       // Save the current state of subtitles before disconnecting
       const currentState = this.#mediaStore.getState();
       this.#subtitlesState = !!currentState.mediaSubtitlesShowing?.length;
+
+      // Clear all stateOwners to teardown event handlers and release DOM references.
+      // Note: mediaelementchangerequest is already dispatched by super.disconnectedCallback() via mediaUnsetCallback.
+      this.#mediaStore?.dispatch({
+        type: 'fullscreenelementchangerequest',
+        detail: undefined,
+      });
       this.#mediaStore?.dispatch({
         type: 'documentelementchangerequest',
         detail: undefined,
@@ -494,6 +515,11 @@ class MediaController extends MediaContainer {
     }
 
     this.unassociateElement(this);
+
+    if (this.#keyboardShortcutsDialog) {
+      this.#keyboardShortcutsDialog.remove();
+      this.#keyboardShortcutsDialog = null;
+    }
   }
 
   /**
@@ -667,8 +693,9 @@ class MediaController extends MediaContainer {
     this.removeEventListener('keyup', this.#keyUpHandler);
   }
 
-  get hotkeys(): string | undefined {
-    return getStringAttr(this, Attributes.HOTKEYS);
+  // Added string to support JSX compatibility
+  get hotkeys(): AttributeTokenList | string {
+    return this.#hotKeys;
   }
 
   set hotkeys(value: string | undefined) {

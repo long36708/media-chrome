@@ -1,3 +1,31 @@
+## [4.18.3](https://github.com/muxinc/media-chrome/compare/v4.18.2...v4.18.3) (2026-03-25)
+
+
+### Bug Fixes
+
+* Re associate element on reconnect ([#1277](https://github.com/muxinc/media-chrome/issues/1277)) ([80a4cd6](https://github.com/muxinc/media-chrome/commit/80a4cd69bbf850f59eaba4ad3b7e1c6d686c938a))
+
+
+
+## [4.18.2](https://github.com/muxinc/media-chrome/compare/v4.18.1...v4.18.2) (2026-03-19)
+
+
+### Bug Fixes
+
+* Patch Memory Leaks ([#1273](https://github.com/muxinc/media-chrome/issues/1273)) ([b380873](https://github.com/muxinc/media-chrome/commit/b3808733d4560e2bb17cbd78f94b4ca56292b5e8)), closes [#1261](https://github.com/muxinc/media-chrome/issues/1261) [#1235](https://github.com/muxinc/media-chrome/issues/1235) [#1261](https://github.com/muxinc/media-chrome/issues/1261) [#1261](https://github.com/muxinc/media-chrome/issues/1261) [#1285](https://github.com/muxinc/media-chrome/issues/1285)
+
+
+
+## [4.18.1](https://github.com/muxinc/media-chrome/compare/v4.18.0...v4.18.1) (2026-03-17)
+
+
+### Bug Fixes
+
+* Add observed attributes for live ([#1272](https://github.com/muxinc/media-chrome/issues/1272)) ([897f4e9](https://github.com/muxinc/media-chrome/commit/897f4e9f196686f669e20b1e36618f5649c70b87)), closes [#1265](https://github.com/muxinc/media-chrome/issues/1265)
+* hotkeys properties support ([#1266](https://github.com/muxinc/media-chrome/issues/1266)) ([6227c5f](https://github.com/muxinc/media-chrome/commit/6227c5f3ae9a14ff36928876665d25186e09c4cd)), closes [#1260](https://github.com/muxinc/media-chrome/issues/1260)
+
+
+
 # [4.18.0](https://github.com/muxinc/media-chrome/compare/v4.17.2...v4.18.0) (2026-02-19)
 
 
